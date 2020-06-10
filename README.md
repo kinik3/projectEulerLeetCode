@@ -1,3 +1,4 @@
 # projectEulerLeetCode
 Project Euler ve LeetCode Bazı Sorular ve Çözümleri
-deneme
+
+Not Defteri üzerinden ilk değişiklik!
