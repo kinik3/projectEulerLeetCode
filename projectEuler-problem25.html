@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+   
+</head>
+<body>
+    <div style="text-align: center; width: max-content; height: max-content;">
+   <h1 style="text-align: left;">1000-digit Fibonacci number - Problem 25</h1></br> 
+   <div class="shadow p-3 mb-5 bg-white rounded">
+    The Fibonacci sequence is defined by the recurrence relation:</br>
+
+    Fn = Fn−1 + Fn−2, where F1 = 1 and F2 = 1.</br>
+    Hence the first 12 terms will be:</br>
+    
+    F1 = 1</br>
+    F2 = 1</br>
+    F3 = 2</br>
+    F4 = 3</br>
+    F5 = 5</br>
+    F6 = 8</br>
+    F7 = 13</br>
+    F8 = 21</br>
+    F9 = 34</br>
+    F10 = 55</br>
+    F11 = 89</br>
+    F12 = 144</br>
+    The 12th term, F12, is the first term to contain three digits</div></br>
+    <div class="shadow p-3 mb-5 bg-white rounded" >What is the index of the first term in the Fibonacci sequence to contain 1000 digits?</div>
+    <button type="button" class="btn btn-primary" onclick="calculeta()" style="text-align: center;">Hesapla</button>
+     
+</div>
+    <script>
+        function calculeta(){ //Problemin Kodlarının Yazılacağı kısım
+       var bigNumber = {};
+
+/**
+ * Sayı dizisi biçiminde iki sayı ekler.
+ *
+ * @param basamak1 basamak2 ile eklemek için en azdan en anlamlı basamak dizisine.
+ * @param basamak2 
+ * @return Toplamın en azdan en önemine kadar basamak dizisi.
+ */
+bigNumber.digitArrayAdd = function(digits1, digits2) {
+    var sumDigits = [];
+    var length = digits1.length > digits2.length ? digits1.length : digits2.length;
+    
+    for(var i = 0; i < length; i++){
+        sumDigits[i] = (digits1[i] || 0) + (digits2[i] || 0) + (sumDigits[i] || 0);
+        bigNumber.rebalanceDigitArray(sumDigits, i);
+    }
+    
+    return sumDigits;
+}; //BigNumber.digitArrayAdd func sonu
+/**
+ * Rakam dizisini yeniden dengeler. Bu, 9'dan büyük sayıları daha yüksek basamaklara kaydırır. Bu yalnızca sağlanan dizini dikkate alır ve yalnızca taşma olduğunda daha yüksek dizinleri yeniden dengeler.
+ *
+ * @param basamak Dengelemek için basamak dizisi
+ * @param index Dengelenecek dizin
+ */
+bigNumber.rebalanceDigitArray = function(digits, index) {
+    var digit = digits[index];
+    while (digit > 9) {
+        //Geçerli dizini güncelleme
+        digits[index] = digit % 10;
+
+        //Sonraki dizini güncelle
+        index++;
+        digits[index] = digit = (digits[index] || 0) + ((digit - digit % 10) / 10);
+    }
+}; //BigNumber.rebalanceDigitArray func sonu
+var getFirstFibTermNumberWithDigits = function(n) {
+    if (n <= 1) {
+        return 1;
+    }
+
+    var previous = [1];
+    var current = [1];
+    var counter = 2;
+
+    while (current.length < n) {
+        var temp = current;
+        current = bigNumber.digitArrayAdd(previous, current);
+        previous = temp;
+        counter++;
+    }
+    console.log('Fib Number is: ' + current.reverse().toString().replace(/,/g, ''));
+
+    return counter;
+};
+
+console.log(getFirstFibTermNumberWithDigits(3));
+console.log("sonuc: " + getFirstFibTermNumberWithDigits(1000));
+
+}
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
