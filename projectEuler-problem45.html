@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+   
+</head>
+<body>
+    <div style="text-align: center; width: max-content; height: max-content;">
+   <h1 style="text-align: left;">Pandigital prime - Problem 45</h1></br> 
+   <div class="shadow p-3 mb-5 bg-white rounded">We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once.
+   </br> For example, 2143 is a 4-digit pandigital and is also prime.</div></br>
+    <div class="shadow p-3 mb-5 bg-white rounded" >What is the largest n-digit pandigital prime that exists?</div>
+    <button type="button" class="btn btn-primary" onclick="calculeta()" style="text-align: center;">Hesapla</button>
+    <div class="shadow p-3 mb-5 bg-white rounded" id="result" ></div>   
+</div>
+    <script>
+        function calculeta(){ //Problemin Kodlarının Yazılacağı kısım
+            var factors = {};
+factors.getFactors = function (number){
+    var factors = [];
+    
+    var possibleFactor = 1;
+    var sqrt = Math.sqrt(number);
+    while(possibleFactor <= sqrt){
+        if(number % possibleFactor == 0){
+            factors[factors.length] = possibleFactor;
+            
+            var otherPossibleFactor = number / possibleFactor;
+            if(otherPossibleFactor > possibleFactor){
+                factors[factors.length] = otherPossibleFactor;
+            } 
+        }
+        possibleFactor++;
+    }
+    
+    return factors;
+};//Factor.getFactors func sonu
+var prime = {};
+prime.isPrime = function(num){
+    num = (num > 0) ? num : num * -1;
+    return factors.getFactors(num).length == 2;
+};//Verilen numaranın asal olup olmadığını kontrol eder
+
+var isPandigital = function(number){
+    var numString = number + '';
+    var numLength = numString.length;
+    for(var i = 1; i <= numLength; i++){
+        if(numString.indexOf(i+'')==-1){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+console.log(isPandigital(2143));
+
+//çünkü 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8, 3'ün katlarıdır ve 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9, 3, 8 ve 9 basamaklı pandigitalin katlarıdır asal mümkün değildir!
+
+var pandigitalNumbers = 0;
+for(var i = 7654321; i > 0; i--){
+    if(isPandigital(i)){
+        if(prime.isPrime(i)){
+            console.log(i);
+            break;
+        }
+    }
+}
+    
+
+}
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
