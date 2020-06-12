@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+   
+</head>
+<body>
+    <div style="text-align: center; width: max-content; height: max-content;">
+   <h1 style="text-align: left;">Circular primes - Problem 35</h1></br> 
+   <div class="shadow p-3 mb-5 bg-white rounded">The number, 197,
+        is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.</br>
+        There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, and 97.</div></br>
+    <div class="shadow p-3 mb-5 bg-white rounded" >How many circular primes are there below one million?</div>
+    <button type="button" class="btn btn-primary" onclick="calculeta()" style="text-align: center;">Hesapla</button>
+    <div class="shadow p-3 mb-5 bg-white rounded" id="result" ></div>   
+</div>
+    <script>
+        function calculeta(){
+            var prime = {};
+prime.isPrime = function(num) {
+    num = (num > 0) ? num : num * -1;
+    return factors.getFactors(num).length <= 2;
+}; //Verilen numaranın asal olup olmadığını kontrol eder
+var factors = {};
+factors.getFactors = function(number) {
+    var factors = [];
+
+    var possibleFactor = 1;
+    var sqrt = Math.sqrt(number);
+    while (possibleFactor <= sqrt) {
+        if (number % possibleFactor == 0) {
+            factors[factors.length] = possibleFactor;
+
+            var otherPossibleFactor = number / possibleFactor;
+            if (otherPossibleFactor > possibleFactor) {
+                factors[factors.length] = otherPossibleFactor;
+            }
+        }
+        possibleFactor++;
+    }
+
+    return factors;
+}; //Factor.getFactors işlevin sonu
+var bigNumber = {};
+bigNumber.createFromNumber = function(number) {
+    var bigNum = [number];
+    bigNumber.rebalanceDigitArray(bigNum);
+    return bigNum;
+};
+bigNumber.rebalanceDigitArray = function(digits, index) {
+    index = index || 0;
+    var digit = digits[index];
+    while (digit > 9) {
+        //Geçerli dizini güncelleme
+        digits[index] = digit % 10;
+
+        //Sonraki dizini güncelle
+        index++;
+        digits[index] = digit = (digits[index] || 0) + ((digit - digit % 10) / 10);
+    }
+}; //BigNumber.rebalanceDigitArray işlevinin sonu
+//---------------------
+/**
+ * Belirtilen basamak sayısı dahil / dahil sayılar için dairesel primerler alır.
+ */
+var getCircularPrimes = function(numDigits) {
+    var circularPrimes;
+    if (numDigits < 1) {
+        circularPrimes = {};
+    } else if (numDigits == 1) {
+        circularPrimes = {
+            '2': true,
+            '3': true,
+            '5': true,
+            '7': true
+        };
+    } else {
+        var circularPrimes = getCircularPrimes(numDigits - 1);
+
+        var digits = [];
+        for (var i = 0; i < numDigits; i++) {
+            digits[i] = 1;
+        }
+
+        var continueLoop = true;
+        while (continueLoop) {
+            var combination, combinations = getCombinations(digits);
+            var circularPrime = true;
+
+            for (var i = 0; i < combinations.length; i++) {
+                if (!prime.isPrime(combinations[i])) {
+                    circularPrime = false;
+                }
+            }
+
+            if (circularPrime) {
+                for (var i = 0, combination; combination = combinations[i]; i++) {
+                    circularPrimes['' + combination] = true;
+                }
+            }
+
+            //Basamakları artırma
+            var digit = numDigits - 1;
+            var digitLoop = true;
+            while (digitLoop) {
+                digitLoop = false;
+
+                if (digits[digit] == 9) {
+                    digits[digit] = 0;
+                    digit--;
+                    digitLoop = true;
+                } else {
+                    digits[digit]++
+                }
+            }
+
+
+            digits[digit] = (digits[digit] + 1) % 10;
+            while (digits[digit] == 0 && digit >= 0) {
+                digits[digit]++;
+                digit--;
+            }
+
+
+            var digit = 0;
+            while ((digits[digit] == 9) && (digit < numDigits)) {
+                if (digit == numDigits - 1) {
+                    continueLoop = false;
+                }
+                digit++;
+            }
+        }
+    }
+
+    return circularPrimes;
+};
+
+var getCombinations = function(digits) {
+    var combinations = [];
+
+    var length = digits.length;
+
+    for (var shift = 0; shift < length; shift++) {
+
+        var num = 0;
+        for (var i = 0; i < length; i++) {
+            num += digits[i] * Math.pow(10, (length - 1 - i + shift) % length);
+        }
+        combinations.push(num);
+    }
+    return combinations;
+};
+
+var twoDigitCircularPrimes = getCircularPrimes(2);
+console.log(twoDigitCircularPrimes);
+
+        var size = 0;
+for (var key in twoDigitCircularPrimes) {
+    if (twoDigitCircularPrimes[key]){
+        size++;
+    }
+}
+console.log(size);
+
+
+var n = 3        
+var nDigitCircularPrimes = getCircularPrimes(6);
+console.log(nDigitCircularPrimes );
+
+        var sizeN = 0;
+for (var key in nDigitCircularPrimes) {
+    if (nDigitCircularPrimes[key]){
+        sizeN++;
+    }
+}
+document.getElementById("result").innerHTML="Sonuç= " + sizeN;
+
+}
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
